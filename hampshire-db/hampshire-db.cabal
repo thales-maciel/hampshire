@@ -1,0 +1,23 @@
+name: hampshire-db
+version: 0.1
+build-type: Simple
+cabal-version: >=1.24
+
+library
+  hs-source-dirs: library
+  default-extensions: ApplicativeDo, Arrows, BangPatterns, BinaryLiterals, BlockArguments, ConstraintKinds, DataKinds, DefaultSignatures, DeriveDataTypeable, DeriveFoldable, DeriveFunctor, DeriveGeneric, DeriveTraversable, EmptyDataDecls, FlexibleContexts, FlexibleInstances, FunctionalDependencies, GADTs, GeneralizedNewtypeDeriving, HexFloatLiterals, LambdaCase, LiberalTypeSynonyms, MagicHash, MultiParamTypeClasses, MultiWayIf, NoImplicitPrelude, NoMonomorphismRestriction, NumericUnderscores, OverloadedStrings, PatternGuards, PatternSynonyms, ParallelListComp, QuasiQuotes, RankNTypes, RecordWildCards, ScopedTypeVariables, StandaloneDeriving, StrictData, TemplateHaskell, TupleSections, TypeApplications, TypeFamilies, TypeOperators, UnboxedTuples
+  default-language: Haskell2010
+  exposed-modules:
+    HampshireDatabase.Session
+    HampshireDatabase.Utils
+  other-modules:
+    HampshireDatabase.Prelude
+    HampshireDatabase.Statement
+    HampshireDatabase.Transaction
+  build-depends:
+    hasql,
+    hasql-th,
+    hasql-transaction,
+    contravariant-extras,
+    uuid,
+    rerebase
