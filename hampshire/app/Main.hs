@@ -51,8 +51,10 @@ main :: IO ()
 main = do
     maybePort <- lookupEnv "PORT"
     let port = fromMaybe 8080 (maybePort >>= readMaybe)
-    let db_config = settings "localhost" 5432 "postgres" "password" "postgres"
-    pool <- acquire 16 (secondsToDiffTime 5) (secondsToDiffTime 5) (secondsToDiffTime 5) db_config
+    maybeDbHost <- lookupEnv "DB_HOST"
+    let dbHost = fromMaybe "localhost" maybeDbHost
+    let dbConfig = settings (BU.pack dbHost) 5432 "postgres" "password" "postgres"
+    pool <- acquire 16 (secondsToDiffTime 5) (secondsToDiffTime 5) (secondsToDiffTime 5) dbConfig
     putStrLn "Loading migrations"
     migration <- loadMigrationFromFile "V1__initial_setup.sql" "./migrations/V1__initial_setup.sql"
     putStrLn "Running migrations"
@@ -97,7 +99,7 @@ handleCreate pool req res = do
         Nothing     -> res $ responseLBS status422 [("Content-Type", "text/plain")] "Unprocessable Entity"
         Just Person{ nome, apelido, nascimento, stack } -> do
             personId <- nextId
-            let sess = insertPerson (personId, nome, apelido, nascimento, stack)
+            let sess = insertPerson (personId, apelido, nome, nascimento, stack)
             result <- use pool sess
             case result of
                 Left (SessionUsageError (QueryError _ _ e)) -> case e of 
